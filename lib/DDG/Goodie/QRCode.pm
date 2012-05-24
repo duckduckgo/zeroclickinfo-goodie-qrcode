@@ -3,22 +3,15 @@ package DDG::Goodie::QRCode;
 
 use DDG::Goodie;
 use HTML::Barcode::QRCode;
+use HTML::Entities;
 
-triggers start => 'qr', 'qrcode';
+triggers start => 'qrcode', 'qr code';
 zci is_cached => 1;
 zci answer_type => "qrcode";
 
-handle query_parts => sub {
-    if (lc(shift) eq 'qr') {
-        return unless lc(shift) eq "code";
-    }
-
-    my $str = join(' ',@_);
-
-    my $html = HTML::Barcode::QRCode->new(text => $str)->render;
-
-    $html = qq( <div style="float:left;margin-right:10px;">$html</div> A QR code that means '$str'. <div class="clear"></div>);
-
+handle remainder => sub {
+    my $html = HTML::Barcode::QRCode->new(text => $_)->render;
+    $html = '<div style="float:left;margin-right:10px;">'.$html.'</div> A QR code that means \''.encode_entities($_).'\'. <div class="clear"></div>';
     return '', html => $html;
 };
 
