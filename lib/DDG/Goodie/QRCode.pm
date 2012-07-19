@@ -5,7 +5,7 @@ use DDG::Goodie;
 use HTML::Barcode::QRCode;
 use HTML::Entities;
 
-triggers start => 'qrcode', 'qr code';
+triggers start => 'qrcode', 'qr code', 'qr';
 zci is_cached => 1;
 zci answer_type => "qrcode";
 
