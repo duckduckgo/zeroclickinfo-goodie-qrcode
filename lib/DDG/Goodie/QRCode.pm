@@ -33,6 +33,7 @@ handle remainder => sub {
     my $raw;
     $image->write(data => \$raw, type => 'gif');
     my $data = encode_base64($raw);
+    $data =~ s/\n//g;
     my $html = '<div style="float:left;margin-right:10px;"><img src="data:image/gif;base64,'.$data.'" alt="A QR Code" /></div> A QR code that means \''.encode_entities($_).'\'. <div class="clear"></div>';
     return '', html => $html;
 };
