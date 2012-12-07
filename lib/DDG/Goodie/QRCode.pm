@@ -2,8 +2,9 @@ package DDG::Goodie::QRCode;
 # ABSTRACT: Generate a QR Code barcode.
 
 use DDG::Goodie;
-use HTML::Barcode::QRCode;
+use Imager::QRCode;
 use HTML::Entities;
+use MIME::Base64; 
 
 triggers start => 'qrcode', 'qr code', 'qr';
 zci is_cached => 1;
@@ -17,9 +18,22 @@ code_url 'https://github.com/duckduckgo/zeroclickinfo-goodie-qrcode/blob/master/
 category 'computing_tools';
 topics 'cryptography';
 
+my $qrcode = Imager::QRCode->new(
+    size          => 4,
+    margin        => 2,
+    version       => 1,
+    level         => 'M',
+    casesensitive => 1,
+    lightcolor    => Imager::Color->new(255, 255, 255),
+    darkcolor     => Imager::Color->new(0, 0, 0),
+);
+
 handle remainder => sub {
-    my $html = HTML::Barcode::QRCode->new(text => $_)->render;
-    $html = '<div style="float:left;margin-right:10px;">'.$html.'</div> A QR code that means \''.encode_entities($_).'\'. <div class="clear"></div>';
+    my $image = $qrcode->plot($_);
+    my $raw;
+    $image->write(data => \$raw, type => 'gif');
+    my $data = encode_base64($raw);
+    my $html = '<div style="float:left;margin-right:10px;"><img src="data:image/gif;base64,'.$data.'" alt="A QR Code" /></div> A QR code that means \''.encode_entities($_).'\'. <div class="clear"></div>';
     return '', html => $html;
 };
 
