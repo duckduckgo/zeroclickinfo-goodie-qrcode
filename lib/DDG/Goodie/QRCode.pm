@@ -3,6 +3,7 @@ package DDG::Goodie::QRCode;
 
 use DDG::Goodie;
 use Imager::QRCode;
+use Imager;
 use HTML::Entities;
 use MIME::Base64; 
 
@@ -27,6 +28,8 @@ my $qrcode = Imager::QRCode->new(
     lightcolor    => Imager::Color->new(255, 255, 255),
     darkcolor     => Imager::Color->new(0, 0, 0),
 );
+
+die "No GIF support available; install giflib (libgif-dev in Debian)" unless $Imager::formats{gif};
 
 handle remainder => sub {
     my $image = $qrcode->plot($_);
