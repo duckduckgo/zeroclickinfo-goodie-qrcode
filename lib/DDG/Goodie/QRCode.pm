@@ -35,12 +35,12 @@ sub html_output {
     my ($data, $string) = @_;
     return '<div style="float:left;margin-right:10px;">'
             .'<img src="data:image/gif;base64,'.$data.'" alt="A QR Code" /></div>'
-            .'A QR code that means \''.encode_entities($_).'\'.'
+            .'A QR code that means \''.encode_entities($_).'\'. '
             .'<div class="clear"></div>';
 }
 
 handle remainder => sub {
-    return if /^(reader|generator|scanner|maker|creator|builder)$/;
+    return if /^[^A-Za-z0-9_"]*\b(reader|generator|scanner|maker|creator|builder)s?\b[^A-Za-z0-9_"]*$/;
     s/^(of|for) (.*)$/$2/;    # Remove of or for in queries like 'qr of http://ddg.gg'
     s/^"(.*)"$/$1/;    # Remove quotes from queries like 'qr "reader"' to ignore skipped words
     if (/^\s*(.*)\s*$/) {
