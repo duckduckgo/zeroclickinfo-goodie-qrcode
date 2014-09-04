@@ -18,6 +18,7 @@ ddg_goodie_test(
 	'qr code https://ddg.gg' => test_zci('', html => qr|<div style="float:left;margin-right:10px;"><img src="data:image/gif;base64,R0lGODlhZABkAJEAAAAAAP.+KAkFAAA7" alt="A QR Code" /></div>A QR code that means 'https://ddg\.gg'\. <div class="clear"></div>|),
 	'qr code "reader"' => test_zci('', html => qr|<div style="float:left;margin-right:10px;"><img src="data:image/gif;base64,R0lGODlhZABkAJEAAAAAAP.+owgUAAA7" alt="A QR Code" /></div>A QR code that means 'reader'\. <div class="clear"></div>|),
 	'qr code of http://twitch.tv' => test_zci('', html => qr|<div style="float:left;margin-right:10px;"><img src="data:image/gif;base64,R0lGODlhdAB0AJEAAAAAAP.+SSntVAAA7" alt="A QR Code" /></div>A QR code that means 'http://twitch\.tv'\. <div class="clear"></div>|),
+	"qr code for 'http://twitch.tv'" => test_zci('', html => qr|<div style="float:left;margin-right:10px;"><img src="data:image/gif;base64,R0lGODlhdAB0AJEAAAAAAP.+SSntVAAA7" alt="A QR Code" /></div>A QR code that means 'http://twitch\.tv'\. <div class="clear"></div>|),
 	'qr code reader' => undef,
 	'qr code scanners!' => undef,
 	'qr code    maker      ' => undef,

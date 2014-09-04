@@ -19,6 +19,8 @@ code_url 'https://github.com/duckduckgo/zeroclickinfo-goodie-qrcode/blob/master/
 category 'computing_tools';
 topics 'cryptography';
 
+my @skip_words = ('reader', 'generator', 'scanner' ,'maker', 'creator', 'builder');
+
 my $qrcode = Imager::QRCode->new(
     size          => 4,
     margin        => 2,
@@ -40,9 +42,10 @@ sub html_output {
 }
 
 handle remainder => sub {
-    return if /^[^A-Za-z0-9_"]*\b(reader|generator|scanner|maker|creator|builder)s?\b[^A-Za-z0-9_"]*$/;
     s/^(of|for) (.*)$/$2/;    # Remove of or for in queries like 'qr of http://ddg.gg'
-    s/^"(.*)"$/$1/;    # Remove quotes from queries like 'qr "reader"' to ignore skipped words
+    my $var = $_;
+    return if grep { $var =~ /^[^\w"']*\b($_)s?\b[^"'\w]*$/ } @skip_words;    # Skip queries like readers, scanner? etc
+    s/^("|')(.*)("|')$/$2/;    # Remove quotes from queries like 'qr "reader"' to ignore skipped words
     if (/^\s*(.*)\s*$/) {
         return unless $1;
         my $str = $1;
@@ -51,7 +54,7 @@ handle remainder => sub {
         $image->write(data => \$raw, type => 'gif');
         my $data = encode_base64($raw);
         $data =~ s/\n//g;
-        return '', html => html_output ($data, $str);
+        return '', html => html_output($data, $str);
     }
 };
 
